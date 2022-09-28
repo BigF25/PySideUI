@@ -155,10 +155,10 @@ class Ui_MainWindow(object):
         self.groupBox_2.setMinimumSize(QSize(800, 300))
         self.gridLayout_2 = QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.mainChart = QChartView(self.groupBox_2)
-        self.mainChart.setObjectName(u"mainChart")
+        self.mainChartView = QChartView(self.groupBox_2)
+        self.mainChartView.setObjectName(u"mainChartView")
 
-        self.gridLayout_2.addWidget(self.mainChart, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.mainChartView, 0, 0, 1, 1)
 
 
         self.verticalLayout_6.addWidget(self.groupBox_2)
@@ -451,6 +451,8 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.statrButton.clicked.connect(MainWindow.startButtonEvent)
+        self.serachDeviceButton.clicked.connect(MainWindow.serachDeviceButtonEvent)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi

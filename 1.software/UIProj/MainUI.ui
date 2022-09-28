@@ -305,7 +305,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
-          <widget class="QChartView" name="mainChart"/>
+          <widget class="QChartView" name="mainChartView"/>
          </item>
         </layout>
        </widget>
@@ -1035,5 +1035,42 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>statrButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startButtonEvent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>559</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>619</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>serachDeviceButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>serachDeviceButtonEvent()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>47</x>
+     <y>614</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>startButtonEvent()</slot>
+  <slot>serachDeviceButtonEvent()</slot>
+ </slots>
 </ui>
