@@ -58,7 +58,7 @@ class MyGenerate(Ui_MainWindow, QMainWindow):
 
         # 直到e 才append temp = 0
         # 直到空才释放本轮
-
+        # 如果本轮不是e结尾，保留数据，下一个read继续，
         while True:
             # print(count, ':', data[count:count+1])
             if data[count:count+1] == b'e':
