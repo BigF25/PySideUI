@@ -8,6 +8,7 @@ from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 from PySide6.QtNetwork import QTcpServer, QTcpSocket
 from PySide6.QtNetwork import QHostAddress
+from numpy import negative
 
 from MainUI import Ui_MainWindow
 from PySide6.QtCore import Qt
@@ -38,9 +39,11 @@ class MyGenerate(Ui_MainWindow, QMainWindow):
         self.my_ListenTcp.newConnection.connect(
             self.newConnection)  # 有新的连接请求后，创建一个通信tcp
 
-    count = 0
+    AxisXcount = 0
     datatemp = 0
-    
+    floatflag = False # 是否进入小数点
+    floatcount = 0 # 小数点位数统计
+    negativeflag = False
     def newConnection(self):
         self.createNewTcp()
 
@@ -53,26 +56,56 @@ class MyGenerate(Ui_MainWindow, QMainWindow):
         print("start read_socket")
         data = self.my_CommTcp.readAll()
         count = 0
-        # datatemp = 0
         print(data)
 
-        # 直到e 才append temp = 0
-        # 直到空才释放本轮
-        # 如果本轮不是e结尾，保留数据，下一个read继续，
+        # 如果是e
+        # append
+        # 坐标轴计数加一
+        # tempdata 清空
+        # flaseflag为false
+        # floatcount 清空        
+        # 本轮计数加一
+
+        # 如果是-
+
+
+        # 如果是.
+        # floatflag为True
+        # 本轮计数加一
+
+        # 如果是空
+        # 释放本轮
+
+        # 不是e结尾，保留数据，下一个read继续，
+
         while True:
             # print(count, ':', data[count:count+1])
             if data[count:count+1] == b'e':
-                if self.count > AXIS_MAX_X:
+                self.datatemp /= pow(10,self.floatcount)
+                if self.negativeflag:
+                    self.datatemp = 0-self.datatemp
+                if self.AxisXcount > AXIS_MAX_X:
                     self.series.remove(0)
-                    self.AxisX.setMin(self.count-AXIS_MAX_X)
-                    self.AxisX.setMax(self.count)
-                self.series.append(self.count, self.datatemp)
-                self.count += 1
+                    self.AxisX.setMin(self.AxisXcount-AXIS_MAX_X)
+                    self.AxisX.setMax(self.AxisXcount)
+                self.series.append(QPointF(self.AxisXcount, self.datatemp))
+                self.AxisXcount += 1
                 print("datatemp",self.datatemp)
                 self.datatemp = 0
+                self.floatflag = False
+                self.floatcount = 0
+                self.negativeflag = False
+                count += 1
+            if data[count:count+1] == b'-':
+                self.negativeflag = True
+                count += 1
+            if data[count:count+1] == b'.':
+                self.floatflag = True
                 count += 1
             if data[count:count+1] == b'':
                 break
+            if self.floatflag is True:
+                self.floatcount +=1
             self.datatemp = self.datatemp*10 + int(data[count:count+1])
             count += 1
             
@@ -103,8 +136,8 @@ class MyGenerate(Ui_MainWindow, QMainWindow):
         self.AxisY = QValueAxis()  # 新建一根Y坐标轴
         self.AxisX.setMin(0)
         self.AxisX.setMax(AXIS_MAX_X)
-        self.AxisY.setMin(0)
-        self.AxisY.setMax(100)
+        self.AxisY.setMin(-10)
+        self.AxisY.setMax(10)
         self.series = QLineSeries()  # 新建一根数据
         self.series.setPointsVisible(True)  # 设置点可见
         self.series.setName("随机数曲线")
